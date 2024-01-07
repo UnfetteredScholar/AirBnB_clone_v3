@@ -4,6 +4,7 @@ Defines the Flask API
 """
 from api.v1.views import app_views
 from flask import Flask
+from flask import jsonify
 from models import storage
 from os import getenv
 
@@ -15,6 +16,14 @@ app.register_blueprint(app_views)
 def teardown_app(exception):
     """The Flask app/request context end event listener"""
     storage.close()
+
+
+@app.errorhandler(404)
+def error_404(error):
+    """
+    404 Error handler
+    """
+    return jsonify({"error": "Not found"})
 
 
 if __name__ == "__main__":
