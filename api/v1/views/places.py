@@ -60,7 +60,6 @@ def create_place(city_id):
     if not user:
         abort(404)
     place_data["city_id"] = city_id
-    place_data["user_id"] = place_data['user_id']
     new_place = Place(**place_data)
     storage.new(new_place)
     storage.save()
