@@ -19,10 +19,9 @@ def states():
 @app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
 def state(state_id):
     """Retrieves state object matching the id"""
-    states = storage.all("State").values()
-    for state in states:
-        if state.id == state_id:
-            return jsonify(state.to_dict())
+    state = storage.get(State, state_id)
+    if state:
+        return jsonify(state.to_dict())
     return abort(404)
 
 
@@ -30,12 +29,11 @@ def state(state_id):
                  methods=['DELETE'], strict_slashes=False)
 def delete_state(state_id):
     """Deletes the state matching the id"""
-    states = storage.all("State").values()
-    for state in states:
-        if state.id == state_id:
-            storage.delete(state)
-            storage.save()
-            return make_response(jsonify({}), 200)
+    state = storage.get(State, state_id)
+    if state:
+        storage.delete(state)
+        storage.save()
+        return make_response(jsonify({}), 200)
     return abort(404)
 
 
